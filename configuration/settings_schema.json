@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Markdown PDF Export",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "browser": {
+      "type": "string",
+      "description": "Browser that draws the PDF: chrome, msedge, chromium, a preview channel such as chrome-beta, or the full path to a browser program. Empty: Chrome, then Edge, then the downloaded Chromium.",
+      "examples": ["chrome", "msedge", "chromium", "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"]
+    },
+    "settings_file": {
+      "type": "string",
+      "description": "Full path to a markdown-pdf-export settings file to use instead of the shared one (~/.config/markdown-pdf-export/settings.json, or %APPDATA%\\markdown-pdf-export\\settings.json on Windows). Studio always edits the shared file. Empty: the shared file."
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Write a debug log to markdown-pdf-debug.log in the temp folder.",
+      "default": false
+    }
+  }
+}

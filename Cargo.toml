@@ -1,0 +1,21 @@
+[package]
+name = "zed-markdown-pdf-export"
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "MIT"
+description = "Zed extension: Markdown to PDF from the Agent panel (MCP context server)"
+repository = "https://github.com/matinfo-tech/zed-markdown-pdf-export"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.7.0"
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+codegen-units = 1

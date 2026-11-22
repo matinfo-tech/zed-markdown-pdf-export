@@ -1,0 +1,93 @@
+name: CI
+
+# Gate for main: runs on every PR targeting main and again after each merge.
+# Branch protection should require the single "CI ok" check (see ci-ok below).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  # Zed builds extensions for this target.
+  WASM_TARGET: wasm32-wasip2
+
+jobs:
+  lint:
+    name: Format and clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Rust
+        run: |
+          rustup toolchain install stable --profile minimal --component rustfmt,clippy
+          rustup default stable
+          rustup target add "$WASM_TARGET"
+      - run: cargo fmt --check
+      - run: cargo clippy --target "$WASM_TARGET" --all-targets -- -D warnings
+      - run: cargo clippy --all-targets -- -D warnings
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+      - run: cargo test --locked
+
+  build:
+    name: Build extension (wasm)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add "$WASM_TARGET"
+      - run: cargo build --locked --release --target "$WASM_TARGET"
+      - name: Check manifest and crate versions match
+        run: |
+          ext=$(sed -n 's/^version = "\(.*\)"/\1/p' extension.toml)
+          crate=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          echo "extension.toml=$ext Cargo.toml=$crate"
+          test "$ext" = "$crate"
+      - name: Check configuration files are valid JSON
+        run: |
+          for f in configuration/*.json; do jq empty "$f"; done
+
+  ci-ok:
+    name: CI ok
+    if: always()
+    needs: [lint, test, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fail if any required job did not succeed
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          echo "$RESULTS"
+          echo "$RESULTS" | jq -e 'all(.[]; .result == "success")' > /dev/null

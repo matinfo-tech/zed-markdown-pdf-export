@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to this extension. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
+[Semantic Versioning](https://semver.org/). Changes to the exporter itself are in the
+[markdown-pdf-export changelog](https://github.com/matinfo-tech/markdown-pdf-export/blob/main/CHANGELOG.md).
+
+## [Unreleased]
+
+## [0.1.0] - 2026-11-22
+
+### Added
+
+- `markdown-pdf` context server: installs and updates the `markdown-pdf-export` npm package
+  (2.2.0 or later) and runs its MCP server with Zed's Node. Works offline once installed.
+- Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
+  instructions in the Configure dialog.
+
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/releases/tag/v0.1.0
