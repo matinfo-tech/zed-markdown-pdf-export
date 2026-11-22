@@ -22,8 +22,9 @@ command line and other editors:
 ### Settings below (all optional)
 
 - `browser`: `chrome`, `msedge`, `chromium`, or the full path to a browser program.
-- `settings_file`: full path to another settings file. Studio does not edit this file.
+- `settings_file`: path to another settings file, `~/...` works. Studio does not edit this file.
 - `debug`: `true` to write a log to `markdown-pdf-debug.log` in the temp folder.
 
-Something wrong? Ask the Agent *"Run the Markdown PDF doctor"*.
+Something wrong? Ask the Agent *"Run the Markdown PDF doctor"*. Update or install trouble is
+reported in the Zed log (`zed: open log`, lines starting with `[markdown-pdf]`).
 Documentation: <https://markdown-pdf.matinfo.tech>
