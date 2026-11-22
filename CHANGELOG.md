@@ -7,6 +7,17 @@ All notable changes to this extension. The format follows
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-22
+
+### Fixed
+
+- Messages about updating the exporter were said to be in the Zed log; they are not. Zed shows
+  them only when started from a terminal with `zed --foreground`. The instructions now say so.
+- `settings_file` starting with `~` or `$HOME`: the extension's own expansion never ran (Zed gives
+  extensions no home directory) and has been removed. The exporter expands these paths since
+  2.3.1: with an older copy installed, the extension now updates it at the next start instead of
+  waiting for the daily check. An older copy (2.2.0 or later) still runs when the update fails.
+
 ## [0.2.0] - 2026-11-22
 
 ### Changed
@@ -34,6 +45,7 @@ All notable changes to this extension. The format follows
 - Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
   instructions in the Configure dialog.
 
-[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/releases/tag/v0.1.0

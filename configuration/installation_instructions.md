@@ -25,6 +25,7 @@ command line and other editors:
 - `settings_file`: path to another settings file, `~/...` works. Studio does not edit this file.
 - `debug`: `true` to write a log to `markdown-pdf-debug.log` in the temp folder.
 
-Something wrong? Ask the Agent *"Run the Markdown PDF doctor"*. Update or install trouble is
-reported in the Zed log (`zed: open log`, lines starting with `[markdown-pdf]`).
+Something wrong? Ask the Agent *"Run the Markdown PDF doctor"*. Messages about updating the
+exporter (lines starting with `[markdown-pdf]`) are not in Zed's log: to see them, quit Zed and
+start it from a terminal with `zed --foreground`.
 Documentation: <https://markdown-pdf.matinfo.tech>

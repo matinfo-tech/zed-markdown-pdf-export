@@ -142,8 +142,8 @@ markdown-pdf → Configure**, which writes them to Zed's `settings.json`:
 The extension is a small WebAssembly module. When Zed starts the `markdown-pdf` context server, it:
 
 1. installs or updates the [`markdown-pdf-export`](https://www.npmjs.com/package/markdown-pdf-export)
-   npm package in the extension's folder (version 2.2.0 or later; an installed copy is used when
-   offline);
+   npm package in the extension's folder: the newest 2.x, checked at most once a day (an older
+   copy, 2.2.0 or later, is used when offline);
 2. runs `cli.mjs mcp` from that package with Zed's Node;
 3. passes the settings above as `MARKDOWN_PDF_BROWSER`, `MARKDOWN_PDF_SETTINGS` and
    `MARKDOWN_PDF_DEBUG`.

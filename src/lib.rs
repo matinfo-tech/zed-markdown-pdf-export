@@ -16,7 +16,7 @@ use zed_extension_api::{
     self as zed, ContextServerConfiguration, ContextServerId, Project, Result,
 };
 
-use crate::config::{ServerOptions, expand_home, major_of, update_check_due, version_at_least};
+use crate::config::{ServerOptions, major_of, update_check_due, version_at_least};
 
 /// Context server id. Same key as the manual `context_servers.markdown-pdf`
 /// entry the package's `setup` command writes, so a hand-made entry with a
@@ -24,9 +24,15 @@ use crate::config::{ServerOptions, expand_home, major_of, update_check_due, vers
 const SERVER_ID: &str = "markdown-pdf";
 const PACKAGE: &str = "markdown-pdf-export";
 const ENTRY_POINT: &str = "node_modules/markdown-pdf-export/cli.mjs";
-/// First release with the setup tools (`install_browser_markdown_pdf`,
-/// `open_studio_markdown_pdf`) and settings reload the extension relies on.
+/// Oldest exporter the server starts with: 2.2.0 brought the setup tools
+/// (`install_browser_markdown_pdf`, `open_studio_markdown_pdf`) and settings
+/// reload the extension relies on.
 const MIN_VERSION: &str = "2.2.0";
+/// Below this version an update is tried at once, without waiting for the
+/// daily check; if it fails, the older copy (at least MIN_VERSION) still
+/// runs. 2.3.1 expands `~` and `$HOME` in `settings_file`, which the extension
+/// cannot do itself: Zed gives it no HOME (only PWD and RUST_BACKTRACE).
+const WANTED_VERSION: &str = "2.3.1";
 /// Only this major version of the package is installed automatically: a new
 /// major may change the MCP surface this extension was written against.
 const PINNED_MAJOR: u64 = 2;
@@ -52,16 +58,19 @@ impl MarkdownPdfExtension {
             .map_err(|error| format!("cannot find the extension folder: {error}"))?;
         let entry = work_dir.join(ENTRY_POINT);
         let installed = zed::npm_package_installed_version(PACKAGE)?;
-        let has_usable_copy = installed
-            .as_deref()
-            .is_some_and(|version| version_at_least(version, MIN_VERSION))
-            && is_file(&entry);
+        let at_least = |minimum| {
+            installed
+                .as_deref()
+                .is_some_and(|version| version_at_least(version, minimum))
+                && is_file(&entry)
+        };
+        let has_usable_copy = at_least(MIN_VERSION);
 
         // The extension API has no async or timers, so an update check blocks
-        // the server start. With a usable copy it runs at most once a day;
+        // the server start. With an up-to-date copy it runs at most once a day;
         // every other start returns here without touching the network.
         let stamp = work_dir.join(UPDATE_CHECK_FILE);
-        if has_usable_copy && !update_check_due(now_secs(), read_unix_secs(&stamp)) {
+        if at_least(WANTED_VERSION) && !update_check_due(now_secs(), read_unix_secs(&stamp)) {
             self.cli_path = Some(entry.clone());
             return Ok(entry);
         }
@@ -95,8 +104,9 @@ impl MarkdownPdfExtension {
 }
 
 /// Ask npm for the newest version and install it when it is an update within
-/// [`PINNED_MAJOR`]. Never fails while a working copy exists — problems are
-/// logged to the Zed log instead; with no copy at all the error is returned.
+/// [`PINNED_MAJOR`]. Never fails while a working copy exists — problems go to
+/// stderr instead, which Zed shows only when started with `zed --foreground`
+/// (not in Zed.log); with no copy at all the error is returned.
 fn check_for_update(entry: &Path, installed: Option<&str>, has_usable_copy: bool) -> Result<()> {
     // Any copy at all, even one older than MIN_VERSION: a stale server beats
     // none. Re-checked after a failed install: npm may have removed the copy.
@@ -169,16 +179,9 @@ fn server_options(project: &Project) -> ServerOptions {
     let settings = ContextServerSettings::for_project(SERVER_ID, project)
         .ok()
         .and_then(|settings| settings.settings);
-    let mut options = ServerOptions::from_settings(settings.as_ref());
-    // The wasm sandbox only sees the extension folder, so the file cannot be
-    // checked for existence here; the server warns about a missing file itself.
-    if let Some(file) = options.settings_file.take() {
-        let home = env::var("HOME")
-            .ok()
-            .or_else(|| env::var("USERPROFILE").ok());
-        options.settings_file = Some(expand_home(&file, home.as_deref()));
-    }
-    options
+    // Passed as written: the server expands `~` and `$HOME` and warns about
+    // a missing file (the wasm sandbox sees neither HOME nor that file).
+    ServerOptions::from_settings(settings.as_ref())
 }
 
 impl zed::Extension for MarkdownPdfExtension {
