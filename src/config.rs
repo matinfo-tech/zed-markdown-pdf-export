@@ -76,26 +76,6 @@ pub fn update_check_due(now_secs: u64, last_check_secs: Option<u64>) -> bool {
     last_check_secs.is_none_or(|last| now_secs.abs_diff(last) >= INTERVAL_SECS)
 }
 
-/// Expand a leading `~`, `~/` or `$HOME` in `path` to `home`. Anything else,
-/// including `~user/...`, is returned unchanged, and so is everything when no
-/// home directory is known: a path that cannot be expanded should reach the
-/// server as written, not break startup.
-pub fn expand_home(path: &str, home: Option<&str>) -> String {
-    let Some(home) = home.filter(|home| !home.is_empty()) else {
-        return path.to_owned();
-    };
-    if path == "~" || path == "$HOME" {
-        return home.to_owned();
-    }
-    for prefix in ["~/", "~\\", "$HOME/", "$HOME\\"] {
-        if let Some(rest) = path.strip_prefix(prefix) {
-            let separator = &prefix[prefix.len() - 1..];
-            return format!("{home}{separator}{rest}");
-        }
-    }
-    path.to_owned()
-}
-
 fn parse(version: &str) -> Option<(u64, u64, u64)> {
     let core = version.trim().trim_start_matches('v');
     let core = core.split(['-', '+']).next()?;
@@ -183,22 +163,5 @@ mod tests {
         assert!(update_check_due(now, Some(now - DAY - 3600)));
         // A stored time in the future (clock set back) counts as due.
         assert!(update_check_due(now, Some(now + 2 * DAY)));
-    }
-
-    #[test]
-    fn expands_home() {
-        let home = Some("/home/u");
-        assert_eq!(expand_home("~", home), "/home/u");
-        assert_eq!(expand_home("$HOME", home), "/home/u");
-        assert_eq!(expand_home("~/pdf.json", home), "/home/u/pdf.json");
-        assert_eq!(expand_home("$HOME/pdf.json", home), "/home/u/pdf.json");
-        assert_eq!(
-            expand_home(r"~\pdf.json", Some(r"C:\Users\u")),
-            r"C:\Users\u\pdf.json"
-        );
-        assert_eq!(expand_home("/abs/pdf.json", home), "/abs/pdf.json");
-        assert_eq!(expand_home("~user/pdf.json", home), "~user/pdf.json");
-        assert_eq!(expand_home("~/pdf.json", None), "~/pdf.json");
-        assert_eq!(expand_home("~/pdf.json", Some("")), "~/pdf.json");
     }
 }
