@@ -30,10 +30,11 @@ const ENTRY_POINT: &str = "node_modules/markdown-pdf-export/cli.mjs";
 const MIN_VERSION: &str = "2.2.0";
 /// Below this version an update is tried at once, without waiting for the
 /// daily check; if it fails, the older copy (at least MIN_VERSION) still
-/// runs. 2.4.0 stops raw HTML in a document from running scripts or loading
-/// other pages while the PDF is printed (2.3.1 already expanded `~` and
-/// `$HOME` in `settings_file`, which Zed gives the extension no HOME to do).
-const WANTED_VERSION: &str = "2.4.0";
+/// runs. 2.5.0 draws Mermaid diagrams and renders task lists, footnotes and
+/// GitHub alerts (2.4.0 stopped raw HTML from running scripts while the PDF is
+/// printed; 2.3.1 expanded `~` and `$HOME` in `settings_file`, which Zed gives
+/// the extension no HOME to do).
+const WANTED_VERSION: &str = "2.5.0";
 /// Only this major version of the package is installed automatically: a new
 /// major may change the MCP surface this extension was written against.
 const PINNED_MAJOR: u64 = 2;

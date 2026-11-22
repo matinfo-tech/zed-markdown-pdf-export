@@ -7,6 +7,15 @@ All notable changes to this extension. The format follows
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-22
+
+### Changed
+
+- Installs with an exporter older than 2.5.0 update at the next start instead of waiting for the
+  daily check. 2.5.0 draws ` ```mermaid ` code blocks as diagrams and renders task lists
+  (`- [x]`), footnotes (`[^1]`) and GitHub alerts (`> [!NOTE]`), which used to print as plain
+  text.
+
 ## [0.2.2] - 2026-11-22
 
 ### Security
@@ -54,7 +63,8 @@ All notable changes to this extension. The format follows
 - Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
   instructions in the Configure dialog.
 
-[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.1.0...v0.2.0
