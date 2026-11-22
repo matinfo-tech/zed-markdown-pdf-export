@@ -7,6 +7,15 @@ All notable changes to this extension. The format follows
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-22
+
+### Security
+
+- Installs with an exporter older than 2.4.0 update at the next start instead of waiting for the
+  daily check. 2.4.0 filters raw HTML in Markdown documents so they cannot run scripts or load
+  other pages while the PDF is printed (`"sanitize": "safe"`, the default). Documents you trust
+  can keep their raw HTML with `"sanitize": "none"` in the settings file.
+
 ## [0.2.1] - 2026-11-22
 
 ### Fixed
@@ -45,7 +54,8 @@ All notable changes to this extension. The format follows
 - Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
   instructions in the Configure dialog.
 
-[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/matinfo-tech/zed-markdown-pdf-export/releases/tag/v0.1.0
