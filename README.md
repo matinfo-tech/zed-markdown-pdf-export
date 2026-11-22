@@ -34,13 +34,25 @@ Zed. Install it and ask the Agent:
 
 ## Install
 
-1. In Zed, open the Command Palette and run `zed: extensions`.
-2. Search for **Markdown PDF Export** and click **Install**.
+> **Not in the Zed extension list yet.** Zed has paused new MCP server extensions while it moves to
+> the [official MCP registry](https://registry.modelcontextprotocol.io/)
+> ([zed-industries/zed#59351](https://github.com/zed-industries/zed/issues/59351)). The server is
+> already there as `io.github.matinfo-tech/markdown-pdf-export`. Until Zed lists it, use one of the
+> two ways below.
+
+**As a dev extension** (needs [Rust](https://rustup.rs); Zed builds it for you):
+
+1. `git clone https://github.com/matinfo-tech/zed-markdown-pdf-export`
+2. In Zed, open the Command Palette and run `zed: install dev extension`, then choose the folder.
 3. Check **Settings → AI → MCP Servers**: the `markdown-pdf` dot turns green after the first start
    (the first one takes a few seconds while Zed downloads the exporter).
 
+**Without the extension** (needs [Node.js](https://nodejs.org) 20 or later): run
+`npx -y markdown-pdf-export setup` and pick Zed, or follow
+[the Zed instructions](https://markdown-pdf.matinfo.tech/editors).
+
 Already added the server by hand (a `context_servers.markdown-pdf` entry with a `command`)? Remove
-that entry, or it keeps replacing the extension's server.
+that entry before installing the extension, or it keeps replacing the extension's server.
 
 ## Use
 
