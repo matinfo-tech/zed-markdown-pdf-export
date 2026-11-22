@@ -46,28 +46,29 @@ impl MarkdownPdfExtension {
             .map_err(|error| format!("cannot find the extension folder: {error}"))?
             .join(ENTRY_POINT);
         let installed = zed::npm_package_installed_version(PACKAGE)?;
+        // Re-checked after a failed install: npm may have removed the old copy.
+        let has_copy = || installed.is_some() && is_file(&entry);
 
         match zed::npm_package_latest_version(PACKAGE) {
-            Ok(latest) => {
-                let outdated = installed.as_deref() != Some(latest.as_str()) || !is_file(&entry);
-                if outdated
-                    && let Err(error) = zed::npm_install_package(PACKAGE, &latest)
-                    // Keep a working older copy rather than fail on a bad network.
-                    && (installed.is_none() || !is_file(&entry))
+            Ok(latest) if installed.as_deref() != Some(latest.as_str()) || !is_file(&entry) => {
+                // A failed update keeps a working older copy rather than stop the server.
+                if let Err(error) = zed::npm_install_package(PACKAGE, &latest)
+                    && !has_copy()
                 {
                     return Err(format!(
                         "could not install {PACKAGE} {latest} from npm: {error}"
                     ));
                 }
             }
-            Err(error) => {
-                if installed.is_none() || !is_file(&entry) {
-                    return Err(format!(
-                        "could not reach npm to install {PACKAGE}: {error}. \
-                         Check the internet connection, then restart the server."
-                    ));
-                }
+            Ok(_) => {}
+            Err(error) if !has_copy() => {
+                return Err(format!(
+                    "could not reach npm to install {PACKAGE}: {error}. \
+                     Check the internet connection, then restart the server."
+                ));
             }
+            // Offline: run the copy already installed.
+            Err(_) => {}
         }
 
         let version = zed::npm_package_installed_version(PACKAGE)?
