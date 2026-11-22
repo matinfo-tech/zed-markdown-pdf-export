@@ -12,6 +12,8 @@ All notable changes to this extension. The format follows
 - README: install as a dev extension (or with `markdown-pdf-export setup`) until Zed lists MCP
   servers from the official MCP registry; new MCP extensions are paused in the Zed extension list.
 - Clearer install/update logic in `src/lib.rs`, same behaviour.
+- README: keyboard shortcut for exporting without the Agent, set up by
+  `markdown-pdf-export setup zed` (2.3.0 or later).
 
 ## [0.1.0] - 2026-11-22
 

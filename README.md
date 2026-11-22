@@ -28,7 +28,7 @@ Zed. Install it and ask the Agent:
 - Zed with the **Agent** set up with an AI provider. The extension adds tools for the Agent; it does
   not add a menu item or a keyboard shortcut (Zed extensions cannot), so without the Agent there is
   nothing to call them. Without an AI provider, use the
-  [command line or a Zed task](https://markdown-pdf.matinfo.tech/editors) instead.
+  [keyboard shortcut](#keyboard-shortcut-no-ai-needed) instead.
 - Google Chrome or Microsoft Edge. If neither is installed, ask the Agent to install the PDF
   browser: it downloads Chromium once (about 200 MB).
 
@@ -48,8 +48,8 @@ Zed. Install it and ask the Agent:
    (the first one takes a few seconds while Zed downloads the exporter).
 
 **Without the extension** (needs [Node.js](https://nodejs.org) 20 or later): run
-`npx -y markdown-pdf-export setup` and pick Zed, or follow
-[the Zed instructions](https://markdown-pdf.matinfo.tech/editors).
+`npx -y markdown-pdf-export setup zed`. It adds the Agent tools, an export task and a keyboard
+shortcut to your Zed files. See [the Zed instructions](https://markdown-pdf.matinfo.tech/editors).
 
 Already added the server by hand (a `context_servers.markdown-pdf` entry with a `command`)? Remove
 that entry before installing the extension, or it keeps replacing the extension's server.
@@ -76,6 +76,24 @@ Run the Markdown PDF doctor.
 | `doctor_markdown_pdf` | Reports the browser in use and the settings files loaded. |
 
 Zed asks before the Agent runs a tool, unless you allowed it in `agent.tool_permissions`.
+
+## Keyboard shortcut (no AI needed)
+
+A Zed extension cannot add a command or a key, but the exporter's own setup can. With
+[Node.js](https://nodejs.org) 20 or later installed, run this once in a terminal:
+
+```sh
+npx -y markdown-pdf-export setup zed
+```
+
+Then, in a Markdown file, press **⌘K ⌘E** on a Mac or **Ctrl+K Ctrl+E** on Windows and Linux to
+export it to PDF. The same export is in the Command Palette: `task: spawn` → *Markdown: Export to
+PDF*.
+
+Setup adds one task to `tasks.json` and one key to `keymap.json`, leaves everything else in those
+files as it was (comments included) and keeps a copy of each as `<file>.markdown-pdf.bak`. With this
+extension installed it does not touch `settings.json`: the extension already provides the Agent
+tools. Needs markdown-pdf-export 2.3.0 or later.
 
 ## Settings
 
