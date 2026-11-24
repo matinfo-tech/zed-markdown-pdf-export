@@ -7,6 +7,15 @@ All notable changes to this extension. The format follows
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-11-24
+
+### Changed
+
+- Installs with an exporter older than 2.8.0 update at the next start instead of waiting for the
+  daily check. 2.8.0 reads a default `author` from the settings file, printed by `{author}` in
+  documents whose front matter has none (`author: none` in a document leaves it out). 2.6.0, also
+  included, opens the PDF on Windows safely when the file name contains `&`.
+
 ## [0.2.3] - 2026-11-22
 
 ### Changed
@@ -63,7 +72,8 @@ All notable changes to this extension. The format follows
 - Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
   instructions in the Configure dialog.
 
-[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.0...v0.2.1
