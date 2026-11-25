@@ -19,7 +19,9 @@ Zed. Install it and ask the Agent:
   contents, maths (KaTeX) and code highlighting.
 - **Studio.** Ask the Agent to *open Studio* to design your pages with a live PDF preview.
 - **One settings file** shared with the command line and the other editors (VS Code, Cursor,
-  Claude...). Design once, same PDFs everywhere.
+  Claude...). Design once, same PDFs everywhere. In VS Code, the
+  [Markdown PDF Export extension](https://marketplace.visualstudio.com/items?itemName=matinfo-tech.markdown-pdf-export)
+  uses the same file.
 - **Local export.** The exporter runs on your computer and sends nothing anywhere; the PDF is drawn
   by your own Chrome or Edge. (What the Agent shares with its AI provider is up to your Zed setup.)
 
