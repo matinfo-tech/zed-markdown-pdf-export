@@ -7,6 +7,16 @@ All notable changes to this extension. The format follows
 
 ## [Unreleased]
 
+## [0.2.5] - 2026-11-28
+
+### Changed
+
+- Installs with an exporter older than 2.10.2 update at the next start instead of waiting for the
+  daily check. 2.10.2 has the MCP tools ask the AI assistant for an absolute path to the Markdown
+  file, so exports work when Zed starts the server outside the project folder. 2.9.1, also
+  included, prints maths in KaTeX's own fonts again instead of falling back to Times.
+- The README links the VS Code extension.
+
 ## [0.2.4] - 2026-11-24
 
 ### Changed
@@ -72,7 +82,8 @@ All notable changes to this extension. The format follows
 - Optional settings `browser`, `settings_file` and `debug`, with a schema and installation
   instructions in the Configure dialog.
 
-[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.5...HEAD
+[0.2.5]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/matinfo-tech/zed-markdown-pdf-export/compare/v0.2.1...v0.2.2
